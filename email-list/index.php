@@ -1,4 +1,46 @@
+<?php
+function dd($data)
+{
+    echo '<pre>';
+    die(var_dump($data));
+    echo '</pre>';
+}
 
+$formError = "False";
+
+try {
+    $pdo = new PDO('mysql:host=127.0.0.1;dbname=email_list', 'root', '');
+} catch (PDOException $e) {
+    dd($e->getMessage());
+}
+
+$statement = $pdo->prepare('SELECT * from cb_email_list');
+$statement->execute();
+$allEmails = $statement->fetchAll(PDO::FETCH_OBJ);
+// dd($allEmails[0]->email);
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+    if ($_POST['email'] != "") {
+        $data = [
+            "email" => $_POST["email"],
+        ];
+        $statement = $pdo->prepare("INSERT INTO cb_email_list (email, created_at, updated_at) VALUES (:email, now(), now())");
+        $newEmail = $statement->execute($data);
+
+        if($newEmail) {
+          header('Location: '. 'http://localhost/ThankYou.php');
+        }
+
+    } else {
+        $formError = true;
+        // dd('Error Empty Form');
+    }
+}
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
   <head>
@@ -22,6 +64,8 @@
       new WOW().init();
     </script>
   </head>
+
+ 
   <body>
     <!-- ====== Navbar Section Start -->
     <div
@@ -30,7 +74,7 @@
       <div class="container">
         <div class="relative -mx-4 flex items-center justify-between">
           <div class="w-60 max-w-full px-4">
-            <a href="index.html" class="navbar-logo block w-full py-5">
+            <a href="index.php" class="navbar-logo block w-full py-5">
               <img
                 src="assets/images/logo/logo-white.svg"
                 alt="logo"
@@ -202,18 +246,22 @@
               <p
                 class="mx-auto mb-10 max-w-[600px] text-base text-[#e4e4e4] sm:text-lg sm:leading-relaxed md:text-xl md:leading-relaxed"
               >
-                Today we got <span class="inline-flex items-center justify-center rounded-lg bg-black py-1 px-1 text-center text-base font-medium text-white transition duration-300 ease-in-out hover:text-primary hover:shadow-lg sm:px-10"> 
-                  10003</span> developers using our templates.
+                Today we got <span class="inline-flex items-center justify-center rounded-lg bg-black py-1 px-1 text-center text-base font-medium text-white transition duration-300 ease-in-out hover:text-primary hover:shadow-lg sm:px-10">
+                  <?php
+
+echo count($allEmails);
+
+?></span> developers using our templates.
               </p>
               <form action="/index.php" method="POST" class="mb-2 flex flex-wrap items-center justify-center">
                 <ul class=" flex flex-wrap items-center justify-center">
-                  
+
                   <li>
                     <input type="email" name="email"
                       class="inline-flex items-center justify-center rounded-lg mr-2 bg-white py-4 px-6 text-center text-base font-medium text-dark transition duration-300 ease-in-out hover:text-primary hover:shadow-lg sm:px-10"
                       placeholder="Enter your email address"
                     >
-                    
+
                   </li>
                   <li>
                     <button
@@ -235,17 +283,22 @@
                       </span>
                     </button>
                   </li>
-                  
+
                 </ul>
-                
+
               </form>
-                <!-- <div 
-                  
-                  class="flex items-center py-1 px-1 text-base font-medium bg-black text-white 
+              <?php
+if ($formError):
+
+?>
+                <div
+
+                  class="flex items-center py-1 px-1 text-base font-medium bg-black text-white
                   mb-10 flex flex-wrap items-center justify-center transition duration-300 ease-in-out hover:opacity-70 sm:px-10"
                 >
                   Please fill your email address
-                </div> -->
+                </div>
+                <?php endif;?>
               <div class="wow fadeInUp text-center" data-wow-delay=".3s">
                 <img
                   src="assets/images/hero/brand.svg"

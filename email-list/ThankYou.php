@@ -27,7 +27,7 @@
       <div class="container">
         <div class="relative -mx-4 flex items-center justify-between">
           <div class="w-60 max-w-full px-4">
-            <a href="index.html" class="navbar-logo block w-full py-5">
+            <a href="index.php" class="navbar-logo block w-full py-5">
               <img
                 src="assets/images/logo/logo-white.svg"
                 alt="logo"
@@ -58,7 +58,7 @@
                 <ul class="blcok lg:flex">
                   <li class="group relative">
                     <a
-                      href="#home"
+                      href="index.php"
                       class="ud-menu-scroll mx-8 flex py-2 text-base text-dark group-hover:text-primary lg:mr-0 lg:inline-flex lg:py-6 lg:px-0 lg:text-white lg:group-hover:text-white lg:group-hover:opacity-70"
                     >
                       Home
@@ -277,7 +277,7 @@
               <h3 class="mb-8 text-xl font-normal text-dark-700 md:text-2xl">
                 Check your email to validate your account.
               </h3>
-              
+
             </div>
           </div>
         </div>
